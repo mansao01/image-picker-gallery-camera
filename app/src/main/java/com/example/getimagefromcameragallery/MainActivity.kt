@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
 
 private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
 private const val IMAGE_MIME_TYPE = "image/*"
+var file:File? = null
 
 @Composable
 fun ImageCaptureAndGallery() {
@@ -138,6 +139,7 @@ fun ImagePickerButton(launcher: ActivityResultLauncher<String>) {
 
 @Composable
 fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
+
     if (imageUri != null) {
         val bitmap = if (Build.VERSION.SDK_INT < 28) {
             MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
@@ -146,6 +148,7 @@ fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
             ImageDecoder.decodeBitmap(source)
         }
 
+        file = CameraUtils.uriToFile(imageUri, context)
         if (bitmap != null) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
@@ -161,6 +164,7 @@ fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
             modifier = Modifier.size(400.dp)
         )
     }
+
 }
 
 
