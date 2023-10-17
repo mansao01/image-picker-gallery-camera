@@ -44,6 +44,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -61,8 +62,6 @@ class MainActivity : ComponentActivity() {
 
 private const val CAMERA_PERMISSION = Manifest.permission.CAMERA
 private const val IMAGE_MIME_TYPE = "image/*"
-var file:File? = null
-
 @Composable
 fun ImageCaptureAndGallery() {
     val context = LocalContext.current
@@ -104,7 +103,6 @@ fun ImageCaptureAndGallery() {
     ) {
         DisplaySelectedImage(galleryImageUri ?: capturedImageUri, context)
         Row {
-
             Button(onClick = {
                 capturedImageUri = null
                 galleryImageUri = null
@@ -113,7 +111,7 @@ fun ImageCaptureAndGallery() {
             }) {
                 Text(text = stringResource(R.string.capture_image))
             }
-            ImagePickerButton(galleryLauncher)
+            ImagePickerButton( galleryLauncher)
         }
         if (isImageSelected) {
             Button(onClick = {
@@ -127,7 +125,6 @@ fun ImageCaptureAndGallery() {
     }
 }
 
-
 @Composable
 fun ImagePickerButton(launcher: ActivityResultLauncher<String>) {
     Button(onClick = {
@@ -139,7 +136,6 @@ fun ImagePickerButton(launcher: ActivityResultLauncher<String>) {
 
 @Composable
 fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
-
     if (imageUri != null) {
         val bitmap = if (Build.VERSION.SDK_INT < 28) {
             MediaStore.Images.Media.getBitmap(context.contentResolver, imageUri)
@@ -148,7 +144,6 @@ fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
             ImageDecoder.decodeBitmap(source)
         }
 
-        file = CameraUtils.uriToFile(imageUri, context)
         if (bitmap != null) {
             Image(
                 bitmap = bitmap.asImageBitmap(),
@@ -164,10 +159,7 @@ fun DisplaySelectedImage(imageUri: Uri?, context: Context) {
             modifier = Modifier.size(400.dp)
         )
     }
-
 }
-
-
 
 fun Context.createImageFile(): File {
     val timeStamp = SimpleDateFormat("yyyy_MM_dd_HH:mm:ss").format(Date())
